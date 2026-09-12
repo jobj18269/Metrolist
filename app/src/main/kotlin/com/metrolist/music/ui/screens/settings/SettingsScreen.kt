@@ -98,6 +98,17 @@ fun SettingsScreen(
                     onClick = { navController.navigate("settings/player") }
                 ),
                 Material3SettingsItem(
+                    icon = painterResource(R.drawable.radio),
+                    title = { Text(stringResource(R.string.echo_brain)) },
+                    description = { Text(stringResource(R.string.echo_brain_desc)) },
+                    onClick = { navController.navigate("settings/echo_brain") }
+                ),
+                Material3SettingsItem(
+                    icon = painterResource(R.drawable.radio),
+                    title = { Text(stringResource(R.string.stream_sources)) },
+                    onClick = { navController.navigate("settings/stream_sources") }
+                ),
+                Material3SettingsItem(
                     icon = painterResource(R.drawable.language),
                     title = { Text(stringResource(R.string.content)) },
                     onClick = { navController.navigate("settings/content") }
@@ -127,7 +138,7 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
         }
-        
+
         // Privacy & Security Section
         Material3SettingsGroup(
             title = stringResource(R.string.settings_section_privacy),
@@ -241,7 +252,7 @@ fun SettingsScreen(
                         add(
                             Material3SettingsItem(
                                 icon = painterResource(R.drawable.update),
-                                title = { 
+                                title = {
                                     Text(
                                         text = stringResource(R.string.new_version_available),
                                     )

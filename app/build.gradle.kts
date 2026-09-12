@@ -251,6 +251,7 @@ configurations.configureEach {
 }
 
 dependencies {
+    implementation(libs.litert)
     implementation(libs.guava)
     implementation(libs.coroutines.guava)
 

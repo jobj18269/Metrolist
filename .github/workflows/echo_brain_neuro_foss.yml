@@ -1,0 +1,79 @@
+name: Metrolist Echo Brain Neuro FOSS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["feat/echo-brain-flowneuro-confirmation-v13.7.0"]
+
+permissions:
+  contents: read
+
+jobs:
+  build-foss:
+    name: Build Metrolist 13.7.0 FOSS APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Create debug keystore
+        run: |
+          mkdir -p "$HOME/.android"
+          keytool -genkeypair -noprompt \
+            -keystore "$HOME/.android/debug.keystore" \
+            -storepass android -keypass android \
+            -alias androiddebugkey -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10000
+
+      - name: Run Echo Brain unit tests
+        run: ./gradlew :app:testFossDebugUnitTest --no-daemon --max-workers=2 --stacktrace --console=plain
+
+      - name: Build FOSS debug APK
+        run: ./gradlew :app:assembleFossDebug --no-daemon --max-workers=2 --stacktrace --console=plain
+        env:
+          METROLIST_APPLICATION_ID: com.metrolist.music
+          METROLIST_APP_NAME: Metrolist Echo Brain
+          METROLIST_BUILD_COMMIT: ${{ github.sha }}
+          PULL_REQUEST: "false"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+
+      - name: Verify APK and FOSS descriptors
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk="$(find app/build/outputs/apk/foss/debug -type f -name '*.apk' -print -quit)"
+          test -n "$apk"
+          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --verbose "$apk"
+          sha256sum "$apk" | tee "$apk.sha256"
+          mkdir -p artifacts
+          cp "$apk" artifacts/metrolist-13.7.0-echo-brain-foss.apk
+          cp "$apk.sha256" artifacts/metrolist-13.7.0-echo-brain-foss.apk.sha256
+
+      - name: Package source code
+        run: |
+          zip -qr artifacts/metrolist-13.7.0-echo-brain-source.zip . \
+            -x '.git/*' '.gradle/*' '**/build/*' 'app/build/*' \
+               'local.properties' 'keystore/*' '*.iml'
+          test -s artifacts/metrolist-13.7.0-echo-brain-source.zip
+
+      - name: Upload APK, checksum and source
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrolist-13.7.0-echo-brain-foss
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 14
