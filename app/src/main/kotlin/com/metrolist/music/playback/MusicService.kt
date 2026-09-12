@@ -4072,7 +4072,6 @@ class MusicService :
 
         songUrlCache.invalidate(mediaId)
         if (failedStreamClient == "WEB_REMIX") {
-            InnerTubeXPlayer.markWebRemixFailed(mediaId)
         }
         Timber.tag(TAG).d("Cleared cached URL after $retryReason (client=$failedStreamClient)")
 
@@ -4082,7 +4081,6 @@ class MusicService :
             scope.launch {
                 if (InnerTubeXPlayer.refreshAfterStreamRejection()) {
                     Timber.tag(TAG).d("Player config changed after stream rejection — restoring WEB_REMIX")
-                    InnerTubeXPlayer.clearWebRemixFailures()
                 }
             }
         }
