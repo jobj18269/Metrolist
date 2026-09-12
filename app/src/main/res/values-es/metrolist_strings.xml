@@ -891,6 +891,7 @@
     <string name="echo_brain_artist_whitelist_off">Desactivada. Echo Brain usa sus candidatas normales aptas.</string>
     <string name="echo_brain_artist_whitelist_on">Sólo inyectar artistas de tu lista (%1$d guardados)</string>
     <string name="echo_brain_artist_whitelist_placeholder">Un artista por línea, coma o punto y coma</string>
+    <string name="echo_brain">Echo Brain</string>
     <string name="echo_brain_desc">Inserta canciones relacionadas ordenadas localmente después de la pista activa sin reemplazar tu cola</string>
     <string name="echo_brain_enable_to_inject">Activa Echo Brain para inyectar recomendaciones.</string>
     <string name="echo_brain_enabled">Activar Echo Brain</string>

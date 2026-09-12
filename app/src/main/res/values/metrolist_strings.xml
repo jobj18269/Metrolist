@@ -1008,6 +1008,7 @@
     <string name="echo_brain_artist_whitelist_off">Off. Echo Brain uses its normal eligible candidates.</string>
     <string name="echo_brain_artist_whitelist_on">Only inject artists from your list (%1$d saved)</string>
     <string name="echo_brain_artist_whitelist_placeholder">One artist per line, comma or semicolon</string>
+    <string name="echo_brain">Echo Brain</string>
     <string name="echo_brain_desc">Insert locally ranked related songs immediately after the active track without replacing your queue</string>
     <string name="echo_brain_enable_to_inject">Enable Echo Brain to inject recommendations.</string>
     <string name="echo_brain_enabled">Enable Echo Brain</string>
